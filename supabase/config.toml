@@ -1,0 +1,28 @@
+# Supabase CLI project configuration.
+#
+# Needed by the GitHub integration and by `supabase link` / `supabase db push`.
+# Only the settings that matter for this project are listed; everything else
+# falls back to the CLI defaults.
+
+project_id = "adreel-ai"
+
+[db]
+# Must match the Postgres version of the linked Supabase project.
+# Check it under Settings -> Infrastructure. Only relevant for `supabase start`.
+major_version = 17
+
+[auth]
+enabled = true
+# Adjust to the deployed URL before going live.
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000"]
+
+[auth.email]
+enable_signup = true
+# Set to true once real users sign up.
+enable_confirmations = false
+
+[storage]
+enabled = true
+# Largest upload the app accepts (video assets, see src/lib/api/uploads.ts).
+file_size_limit = "200MiB"

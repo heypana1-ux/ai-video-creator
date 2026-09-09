@@ -4,6 +4,9 @@
 -- Every table is workspace scoped and protected by row level security. The
 -- application additionally filters by workspace_id on every query, so a policy
 -- mistake cannot silently turn into a data leak.
+--
+-- The whole file is idempotent: running it twice is safe, which matters when it
+-- is applied both by hand in the SQL editor and by the GitHub integration.
 -- =============================================================================
 
 create extension if not exists "pgcrypto";
@@ -236,9 +239,19 @@ create table if not exists public.exports (
 
 create index if not exists exports_project_idx on public.exports (project_id, created_at desc);
 
-alter table public.render_jobs
-  add constraint render_jobs_export_fk
-  foreign key (export_id) references public.exports (id) on delete set null;
+-- Added after the fact because render_jobs is created before exports.
+-- Guarded so the whole migration stays re-runnable.
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'render_jobs_export_fk'
+  ) then
+    alter table public.render_jobs
+      add constraint render_jobs_export_fk
+      foreign key (export_id) references public.exports (id) on delete set null;
+  end if;
+end;
+$$;
 
 create table if not exists public.provider_usage (
   id                 uuid primary key default gen_random_uuid(),

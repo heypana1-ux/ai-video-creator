@@ -206,11 +206,28 @@ scheitern zu lassen.
 
 ## Supabase einrichten
 
-```bash
-# 1. Migration einspielen
-psql "$DATABASE_URL" -f supabase/migrations/0001_init.sql
+Die Migration ist idempotent – ein zweiter Lauf ist gefahrlos.
 
-# 2. Erst registrieren, danach optional Beispieldaten
+**Variante A: einmalig im SQL-Editor** (am schnellsten)
+
+Inhalt von `supabase/migrations/20260101000000_init.sql` in den SQL-Editor des
+Projekts einfügen und ausführen. Das legt alle 14 Tabellen, die RLS-Policies
+und den privaten Storage-Bucket `adreel-media` an.
+
+**Variante B: per CLI oder GitHub-Integration**
+
+```bash
+supabase link --project-ref <dein-project-ref>
+supabase db push
+```
+
+Für die GitHub-Integration (Supabase → Settings → Integrations → GitHub) als
+*Working directory* das Repo-Root eintragen (Feld leer lassen). `supabase/`
+liegt dort, und `supabase/config.toml` ist vorhanden.
+
+**Beispieldaten (optional, erst nach der ersten Registrierung)**
+
+```bash
 psql "$DATABASE_URL" -f supabase/seed.sql
 ```
 
