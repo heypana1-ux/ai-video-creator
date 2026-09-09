@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+/*
+ * AdReel AI design tokens.
+ * Dark by default: near-black ground, violet -> magenta -> electric blue
+ * accents, restrained gradients and high type contrast.
+ */
+@theme {
+  --color-ink-950: #050508;
+  --color-ink-900: #08080f;
+  --color-ink-850: #0b0b14;
+  --color-ink-800: #10101c;
+  --color-ink-700: #171726;
+  --color-ink-600: #1f1f33;
+  --color-ink-500: #2b2b45;
+
+  --color-chalk: #f6f6fb;
+  --color-chalk-dim: #b9b9cf;
+  --color-chalk-faint: #7d7d99;
+
+  --color-violet-brand: #8b5cf6;
+  --color-violet-deep: #6d28d9;
+  --color-magenta-brand: #ec4899;
+  --color-electric: #38bdf8;
+  --color-mint: #34d399;
+  --color-amber-brand: #fbbf24;
+  --color-danger: #f87171;
+
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
+
+  --radius-card: 1rem;
+
+  --shadow-glow: 0 0 0 1px rgba(139, 92, 246, 0.25), 0 18px 50px -20px rgba(139, 92, 246, 0.55);
+  --shadow-panel: 0 24px 70px -40px rgba(0, 0, 0, 0.95);
+
+  --animate-shimmer: shimmer 1.8s ease-in-out infinite;
+  --animate-rise: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-drift: drift 22s ease-in-out infinite alternate;
+}
+
+@keyframes shimmer {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 0.75;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(-3%, -2%, 0) scale(1.05);
+  }
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.15);
+  }
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: var(--color-ink-950);
+  color: var(--color-chalk);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+}
+
+/* Focus ring that stays visible on every surface. */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-electric);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-violet-brand) 55%, transparent);
+  color: #fff;
+}
+
+/* Thin, unobtrusive scrollbars inside panels. */
+.scrollbar-slim {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink-600) transparent;
+}
+.scrollbar-slim::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scrollbar-slim::-webkit-scrollbar-thumb {
+  background: var(--color-ink-600);
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@utility surface-card {
+  background: linear-gradient(
+    160deg,
+    color-mix(in oklab, var(--color-ink-800) 92%, var(--color-violet-brand) 8%),
+    var(--color-ink-900)
+  );
+  border: 1px solid var(--color-ink-700);
+  border-radius: var(--radius-card);
+}
+
+@utility text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--color-chalk) 0%,
+    var(--color-violet-brand) 45%,
+    var(--color-electric) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility aurora {
+  background:
+    radial-gradient(60% 45% at 15% 0%, rgba(139, 92, 246, 0.28), transparent 65%),
+    radial-gradient(45% 40% at 85% 10%, rgba(236, 72, 153, 0.22), transparent 60%),
+    radial-gradient(55% 50% at 50% 100%, rgba(56, 189, 248, 0.16), transparent 60%);
+}
