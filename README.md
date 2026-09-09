@@ -183,6 +183,7 @@ Kurzfassung – Details in [`docs/PROVIDERS.md`](docs/PROVIDERS.md):
 # .env.local
 ADREEL_TEXT_PROVIDER=anthropic
 ANTHROPIC_API_KEY=sk-ant-...
+ANTHROPIC_TEXT_MODEL=claude-opus-5   # optional; claude-sonnet-5 ist günstiger
 
 ADREEL_IMAGE_PROVIDER=replicate
 REPLICATE_API_TOKEN=r8_...

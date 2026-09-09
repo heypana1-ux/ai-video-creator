@@ -21,6 +21,10 @@ function bool(name: string): boolean {
   return value === "1" || value === "true" || value === "yes";
 }
 
+/** Reasoning-effort levels accepted by the current Claude models. */
+export const EFFORT_LEVELS = ["low", "medium", "high", "xhigh", "max"] as const;
+export type EffortLevel = (typeof EFFORT_LEVELS)[number];
+
 export const serverEnv = {
   get appUrl(): string {
     return str("NEXT_PUBLIC_APP_URL", "http://localhost:3000").replace(/\/$/, "");
@@ -90,7 +94,12 @@ export const serverEnv = {
     return str("ANTHROPIC_BASE_URL", "https://api.anthropic.com");
   },
   get anthropicTextModel(): string {
-    return str("ANTHROPIC_TEXT_MODEL", "claude-sonnet-5");
+    return str("ANTHROPIC_TEXT_MODEL", "claude-opus-5");
+  },
+  /** Optional reasoning effort. Empty (the default) leaves the model's own. */
+  get anthropicEffort(): EffortLevel | null {
+    const value = str("ANTHROPIC_EFFORT");
+    return EFFORT_LEVELS.includes(value as EffortLevel) ? (value as EffortLevel) : null;
   },
 
   get replicateApiToken(): string {

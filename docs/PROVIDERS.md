@@ -104,11 +104,27 @@ Nutzt `/chat/completions` mit `response_format: json_object`.
 ```bash
 ADREEL_TEXT_PROVIDER=anthropic
 ANTHROPIC_API_KEY=sk-ant-...
-ANTHROPIC_TEXT_MODEL=claude-sonnet-5   # optional
+ANTHROPIC_TEXT_MODEL=claude-opus-5   # optional, Standard
+ANTHROPIC_EFFORT=                    # optional: low|medium|high|xhigh|max
 ```
 
-Nutzt `/v1/messages`. Bei JSON-Antworten wird der Assistant-Turn mit `{`
-vorbelegt, damit keine Fließtext-Einleitung entsteht.
+Nutzt das offizielle SDK (`@anthropic-ai/sdk`) gegen `/v1/messages`.
+
+Zwei Parameter, die ältere Beispiele häufig mitschicken, werden von **allen
+aktuellen Modellen** (Opus 5, Sonnet 5, die 4.6/4.7/4.8-Familie) mit einem 400
+abgelehnt und sind hier deshalb bewusst nicht gesetzt:
+
+- **`temperature` / `top_p` / `top_k`** – Sampling-Parameter wurden entfernt.
+  `TextGenerationInput.temperature` wird von diesem Adapter ignoriert; der
+  OpenAI-Adapter wertet es weiterhin aus.
+- **Assistant-Prefill** (die Antwort mit `{` vorbelegen) – nicht mehr erlaubt.
+  Die JSON-Form trägt stattdessen der Prompt; `extractJsonObject` und die
+  Zod-Validierung im Konzept-Engine fangen überschüssigen Fließtext ab.
+
+Kosten steuerst du über `ANTHROPIC_TEXT_MODEL` (Sonnet 5 kostet rund ein
+Drittel von Opus 5) und `ANTHROPIC_EFFORT` (niedrigere Stufe = weniger
+Denk-Tokens). Antwortet das Modell mit `stop_reason: "refusal"`, meldet der
+Adapter das als verständlichen Fehler statt als leere Antwort.
 
 ### Mock
 
